@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/ViewModels/NewsArticleListViewModel.dart';
-import 'package:news_app/ViewModels/NewsArticleViewModel.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'dart:io';
 // Import for Android features.
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 // Import for iOS features.
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
+import '../Model/news_article.dart';
+
 class NewsArticleDetails extends StatefulWidget {
-  final NewsArticleViewModel article;
+  final NewsArticle article;
 
   NewsArticleDetails({required this.article});
 

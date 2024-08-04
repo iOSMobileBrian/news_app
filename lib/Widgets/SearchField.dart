@@ -15,7 +15,7 @@ class _SearchFieldState extends State<SearchField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
-      onChanged: widget.onSubmit,
+      onSubmitted: widget.onSubmit,
       decoration: InputDecoration(
           labelText: "Search For News",
           icon: Padding(

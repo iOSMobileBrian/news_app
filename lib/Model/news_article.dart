@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class NewsArticle {
   final String title;
   final String description;
@@ -10,6 +8,9 @@ class NewsArticle {
 
   factory NewsArticle.fromJSON(Map<String, dynamic> json) {
     return NewsArticle(
-        title: json["title"], description: json["description"], url: json["url"], urlToImage: json["urlToImage"]);
+        title: json["title"] ?? '',
+        description: json["description"] ?? '',
+        url: json["url"] ?? '',
+        urlToImage: json["urlToImage"] ?? '');
   }
 }

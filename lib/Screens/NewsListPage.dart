@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/Providers/providers.dart';
-import 'package:news_app/ViewModels/NewsArticleViewModel.dart';
 import 'package:news_app/Widgets/SearchField.dart';
 import 'package:news_app/Widgets/NewsList.dart';
+
+import '../Model/news_article.dart';
 
 class NewsListPage extends ConsumerWidget {
   @override
@@ -20,11 +21,8 @@ class NewsListPage extends ConsumerWidget {
         ),
       ),
       body: newsProvider.when(
-        data: (List<NewsArticleViewModel> data) => NewsList(articles: data),
-        error: (Object error, _) {
-          print(error);
-          return null;
-        },
+        data: (List<NewsArticle> data) => NewsList(articles: data),
+        error: (Object error, _)=> Center(child: Text('We are having issues please try again'),),
         loading: () => Center(child: CircularProgressIndicator()),
       ),
     );

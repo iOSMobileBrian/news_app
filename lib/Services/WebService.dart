@@ -10,7 +10,6 @@ class WebService {
     if (response.statusCode == 200) {
       final results = jsonDecode(response.body);
       Iterable list = results["articles"];
-      //print("List: $list");
       return list.map((article) => NewsArticle.fromJSON(article)).toList();
     } else {
       throw Exception("an error occurred");
@@ -18,13 +17,12 @@ class WebService {
   }
 
   Future<List<NewsArticle>> getNewsByKeyword(String keyword) async {
-    String url = "https://newsapi.org/v2/top-headlines?sources=$keyword&apiKey=53eb5237cd3f4daa9e75ea38efe4f08a";
+    String url = "https://newsapi.org/v2/everything?q=$keyword&from=2024-08-03&to=2024-08-03&sortBy=popularity&apiKey=53eb5237cd3f4daa9e75ea38efe4f08a";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final results = jsonDecode(response.body);
       Iterable list = results["articles"];
-      //print("List: $list");
       return list.map((article) => NewsArticle.fromJSON(article)).toList();
     } else {
       throw Exception("an error occurred");

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:news_app/ViewModels/NewsArticleListViewModel.dart';
 import 'package:news_app/Screens/NewsArticleDetails.dart';
-import 'package:news_app/ViewModels/NewsArticleViewModel.dart';
+
+import '../Model/news_article.dart';
 
 class NewsList extends StatelessWidget {
   NewsList({required this.articles});
 
-  final List<NewsArticleViewModel> articles;
+  final List<NewsArticle> articles;
 
-  void _showDetails(BuildContext context, NewsArticleViewModel article) {
+  void _showDetails(BuildContext context, NewsArticle article) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => NewsArticleDetails(article: article)));
   }
 
@@ -28,9 +27,9 @@ class NewsList extends StatelessWidget {
             leading: Container(
                 width: 100,
                 height: 100,
-                child: article.imageUrl.isEmpty
+                child: article.urlToImage.isEmpty
                     ? Image.asset("images/news-placeholder.png")
-                    : Image.network(article.imageUrl)),
+                    : Image(image: NetworkImage(article.urlToImage),fit: BoxFit.cover,)),
             title: Text(article.title),
           );
         });
