@@ -4,7 +4,7 @@ import 'package:news_app/Model/news_article.dart';
 
 class WebService {
   Future<List<NewsArticle>> getNews() async {
-    String url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=53eb5237cd3f4daa9e75ea38efe4f08a";
+    String url = "https://newsapi.org/v2/top-headlines?country=us&apiKey={your_api_key}";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -17,7 +17,7 @@ class WebService {
   }
 
   Future<List<NewsArticle>> getNewsByKeyword(String keyword) async {
-    String url = "https://newsapi.org/v2/everything?q=$keyword&from=2024-08-03&to=2024-08-03&sortBy=popularity&apiKey=53eb5237cd3f4daa9e75ea38efe4f08a";
+    String url = "https://newsapi.org/v2/everything?q=$keyword&from=2024-08-03&to=2024-08-03&sortBy=popularity&apiKey={your_api_key}";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
