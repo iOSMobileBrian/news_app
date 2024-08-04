@@ -1,28 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/Screens/NewsListPage.dart';
 import 'package:news_app/ViewModels/NewsArticleListViewModel.dart';
-import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      home: ChangeNotifierProvider(
-            create: (context) => NewsArticleListView(),
-            child: NewsListPage(),),
+      home: NewsListPage(),
       title: 'News App',
       theme: ThemeData(
-
         primarySwatch: Colors.blue,
       ),
-
     );
   }
 }
-
-

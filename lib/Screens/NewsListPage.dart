@@ -1,69 +1,32 @@
-
 import 'package:flutter/material.dart';
-import 'package:news_app/ViewModels/NewsArticleListViewModel.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:news_app/Providers/providers.dart';
 import 'package:news_app/ViewModels/NewsArticleViewModel.dart';
 import 'package:news_app/Widgets/SearchField.dart';
-import 'package:provider/provider.dart';
 import 'package:news_app/Widgets/NewsList.dart';
-import 'package:news_app/Screens/NewsArticleDetails.dart';
 
-
-class NewsListPage extends StatefulWidget {
-
+class NewsListPage extends ConsumerWidget {
   @override
-  _NewsListPageState createState() => _NewsListPageState();
-}
-
-class _NewsListPageState extends State<NewsListPage> {
-
- final _controller = TextEditingController();
-
-
-
-
-
- Widget _buildList( NewsArticleListView vm){
-
-   switch(vm.loadingStatus){
-
-
-       case LoadingStatus.searching:
-            return Align(child: CircularProgressIndicator(),);
-       case LoadingStatus.empty:
-            return Align(child: Text("No results found"),);
-       case LoadingStatus.completed:
-            return Expanded(flex: 1,child: NewsList(vm: vm));
-   }
-
-
- }
-
-
-  @override
-  Widget build(BuildContext context) {
-    final vm = Provider.of<NewsArticleListView>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final newsProvider = ref.watch(newsArticleProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text("The News"),
-      ),
-
-
-      body: Column(
-        children: [
-          SearchField(onSubmit: (value){
-
-            if(value != null){
-              vm.newsSearch(value);
+        title: SearchField(
+          onSubmit: (value) {
+            if (value.isNotEmpty) {
+              ref.read(newsArticleProvider.notifier).newsSearch(value);
             }
-
-
-
-          },),
-          _buildList(vm),
-        ],
+          },
+        ),
+      ),
+      body: newsProvider.when(
+        data: (List<NewsArticleViewModel> data) => NewsList(articles: data),
+        error: (Object error, _) {
+          print(error);
+          return null;
+        },
+        loading: () => Center(child: CircularProgressIndicator()),
       ),
     );
-
   }
 }
-

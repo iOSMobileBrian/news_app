@@ -1,53 +1,34 @@
+import 'dart:async';
 
-
-
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/Model/news_article.dart';
 import 'package:news_app/Services/WebService.dart';
 import 'package:news_app/ViewModels/NewsArticleViewModel.dart';
 
-enum LoadingStatus{
+enum LoadingStatus { completed, loading, searching, empty }
 
-  completed,
-  loading,
-  searching,
-  empty
-}
-
-
-class NewsArticleListView extends ChangeNotifier{
-
-  List<NewsArticleViewModel> articles = [];
-
-  NewsArticleListView(){
-    _createNewsList();
-  }
-
+class NewsArticleListView extends AsyncNotifier<List<NewsArticleViewModel>> {
   var loadingStatus = LoadingStatus.searching;
 
-
-  Future<void> newsSearch(String keyword) async{
-    this.loadingStatus = LoadingStatus.searching;
-    notifyListeners();
+  Future<void> newsSearch(String keyword) async {
+    state = const AsyncLoading();
 
     List<NewsArticle> results = await WebService().getNewsByKeyword(keyword);
 
-    this.articles = results.map((results) => NewsArticleViewModel(article: results)).toList();
-    this.loadingStatus = this.articles.isEmpty ? LoadingStatus.empty : LoadingStatus.completed;
-    notifyListeners();
-
+    final articles = results.map((results) => NewsArticleViewModel(article: results)).toList();
+    state = AsyncData(articles);
   }
 
-  Future<void> _createNewsList() async{
-
-    this.loadingStatus = LoadingStatus.searching;
-    notifyListeners();
-
+  Future<List<NewsArticleViewModel>> _createNewsList() async {
+    state = const AsyncLoading();
     List<NewsArticle> newsArticle = await WebService().getNews();
 
-    this.articles = newsArticle.map((articles) => NewsArticleViewModel(article: articles)).toList();
-    this.loadingStatus = this.articles.isEmpty ? LoadingStatus.empty : LoadingStatus.completed;
-    notifyListeners();
+    final articles = newsArticle.map((articles) => NewsArticleViewModel(article: articles)).toList();
+    return articles;
+  }
+
+  @override
+  FutureOr<List<NewsArticleViewModel>> build() async {
+    return await _createNewsList();
   }
 }
